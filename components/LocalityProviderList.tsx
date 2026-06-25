@@ -60,7 +60,9 @@ export function LocalityProviderList({ city, locality, localityName }: { city: s
                 lat: 19.0760 + (Math.random() * 0.05 - 0.025), // Mock coordinates around Mumbai
                 lng: 72.8777 + (Math.random() * 0.05 - 0.025),
                 rating: p.rating,
-                category: p.category.replace('_', ' ')
+                category: p.category.replace('_', ' '),
+                city: city,
+                locality: locality
               }))}
             />
           </div>
