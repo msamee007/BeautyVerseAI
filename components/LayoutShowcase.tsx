@@ -5,6 +5,7 @@ import { useTheme, ThemeMode } from "./ThemeProvider";
 import { motion, AnimatePresence } from "framer-motion";
 import { searchProvidersByMode } from "@/lib/actions/providers";
 import Link from "next/link";
+import { Trees, UserCircle, PawPrint, Scissors, Sparkles, MapPin, TrendingUp, Settings, Eye } from "lucide-react";
 
 export function LayoutShowcase() {
   const { mode, setMode, isDark, toggleDark } = useTheme();
@@ -13,10 +14,10 @@ export function LayoutShowcase() {
 
   const getLogo = (currentMode: ThemeMode) => {
     switch (currentMode) {
-      case "female": return "🌴 Palm";
-      case "male": return "🧔 Beard";
-      case "pet": return "🐾 Paw";
-      case "provider": return "✂️ Scissors";
+      case "female": return <span className="flex items-center gap-1"><Trees className="w-5 h-5" /> Palm</span>;
+      case "male": return <span className="flex items-center gap-1"><UserCircle className="w-5 h-5" /> Beard</span>;
+      case "pet": return <span className="flex items-center gap-1"><PawPrint className="w-5 h-5" /> Paw</span>;
+      case "provider": return <span className="flex items-center gap-1"><Scissors className="w-5 h-5" /> Scissors</span>;
     }
   };
 
@@ -58,8 +59,8 @@ export function LayoutShowcase() {
       <nav className="border-b border-slate-200 bg-white/90 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-serif text-slate-900 flex items-center gap-2">
-              🌴 BeautyVerse<span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-teal-400">AI</span>
+            <span className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+              <Trees className="w-6 h-6 text-rose-400" /> BeautyVerse<span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-teal-400">AI</span>
             </span>
           </div>
           <div className="flex items-center gap-6">
@@ -105,7 +106,7 @@ export function LayoutShowcase() {
              <div className="flex flex-col sm:flex-row justify-center gap-6 pt-8">
                <Link href="/customer">
                  <button className="px-8 py-4 bg-slate-900 text-white font-bold uppercase tracking-widest rounded-2xl hover:scale-105 transition-transform shadow-2xl flex items-center gap-2 mx-auto sm:mx-0">
-                   Enter Portal <span className="text-xl">✨</span>
+                   Enter Portal <Sparkles className="w-5 h-5" />
                  </button>
                </Link>
                <Link href="/provider-login">
@@ -120,7 +121,7 @@ export function LayoutShowcase() {
         {/* Trusted By Marquee */}
         <div className="w-full bg-slate-900 text-white py-6 overflow-hidden shadow-inner">
           <div className="flex justify-center items-center gap-8 md:gap-16 flex-wrap max-w-7xl mx-auto font-black tracking-widest opacity-90 text-sm md:text-base">
-            <span>📍 MUMBAI</span> <span>•</span> <span>📍 BANGALORE</span> <span>•</span> <span>📍 DELHI</span> <span>•</span> <span>📍 PUNE</span> <span>•</span> <span>📍 HYDERABAD</span>
+            <span className="flex items-center gap-1"><MapPin className="w-4 h-4" /> MUMBAI</span> <span>•</span> <span className="flex items-center gap-1"><MapPin className="w-4 h-4" /> BANGALORE</span> <span>•</span> <span className="flex items-center gap-1"><MapPin className="w-4 h-4" /> DELHI</span> <span>•</span> <span className="flex items-center gap-1"><MapPin className="w-4 h-4" /> PUNE</span> <span>•</span> <span className="flex items-center gap-1"><MapPin className="w-4 h-4" /> HYDERABAD</span>
           </div>
         </div>
         
@@ -139,8 +140,8 @@ export function LayoutShowcase() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Customer Feature 1 */}
             <div className="p-8 bg-white border border-slate-300 rounded-3xl shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:shadow-2xl hover:-translate-y-1 transition-all group">
-              <div className="w-14 h-14 bg-[#D4AF37]/10 text-[#D4AF37] flex items-center justify-center text-2xl mb-6">✨</div>
-              <h3 className="text-xl font-serif mb-3">AI Beauty Concierge</h3>
+              <div className="w-14 h-14 bg-[#D4AF37]/10 text-[#D4AF37] flex items-center justify-center mb-6 rounded-full"><Sparkles className="w-6 h-6" /></div>
+              <h3 className="text-xl font-bold mb-3">AI Beauty Concierge</h3>
               <p className="text-muted-foreground mb-4 text-sm">Ask our AI to create custom bridal packages, suggest hairstyles based on your photo, or find the best fades in your area.</p>
               <ul className="space-y-2 text-sm font-semibold text-muted-foreground">
                 <li className="flex items-center gap-2"><span className="text-primary">✓</span> Hairstyle & Makeup Simulator</li>
@@ -150,8 +151,8 @@ export function LayoutShowcase() {
 
             {/* Customer Feature 2 */}
             <div className="p-8 bg-white border border-slate-300 rounded-3xl shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:shadow-2xl hover:-translate-y-1 transition-all group">
-              <div className="w-14 h-14 bg-[#D4AF37]/10 text-[#D4AF37] flex items-center justify-center text-2xl mb-6">📍</div>
-              <h3 className="text-xl font-serif mb-3">Live Crowd & Discovery</h3>
+              <div className="w-14 h-14 bg-[#D4AF37]/10 text-[#D4AF37] flex items-center justify-center mb-6 rounded-full"><MapPin className="w-6 h-6" /></div>
+              <h3 className="text-xl font-bold mb-3">Live Crowd & Discovery</h3>
               <p className="text-muted-foreground mb-4 text-sm">Never wait in line again. See real-time crowd levels, book specific stylists, and find verified premium salons near you on an interactive map.</p>
               <ul className="space-y-2 text-sm font-semibold text-muted-foreground">
                 <li className="flex items-center gap-2"><span className="text-primary">✓</span> Real-time Crowd Status</li>
@@ -161,8 +162,8 @@ export function LayoutShowcase() {
 
             {/* Provider Feature 1 */}
             <div className="p-8 bg-white border border-slate-300 rounded-3xl shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:shadow-2xl hover:-translate-y-1 transition-all group">
-              <div className="w-14 h-14 bg-[#D4AF37]/10 text-[#D4AF37] flex items-center justify-center text-2xl mb-6">📈</div>
-              <h3 className="text-xl font-serif mb-3">Fix Customer Acquisition</h3>
+              <div className="w-14 h-14 bg-[#D4AF37]/10 text-[#D4AF37] flex items-center justify-center mb-6 rounded-full"><TrendingUp className="w-6 h-6" /></div>
+              <h3 className="text-xl font-bold mb-3">Fix Customer Acquisition</h3>
               <p className="text-muted-foreground mb-4 text-sm">Struggling to attract clients? Get massive localized visibility, AI-powered customer matching, and featured provider placements.</p>
               <ul className="space-y-2 text-sm font-semibold text-muted-foreground">
                 <li className="flex items-center gap-2"><span className="text-primary">✓</span> Algorithmic Recommendations</li>
@@ -172,8 +173,8 @@ export function LayoutShowcase() {
 
             {/* Provider Feature 2 */}
             <div className="p-8 bg-white border border-slate-300 rounded-3xl shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:shadow-2xl hover:-translate-y-1 transition-all group">
-              <div className="w-14 h-14 bg-[#D4AF37]/10 text-[#D4AF37] flex items-center justify-center text-2xl mb-6">⚙️</div>
-              <h3 className="text-xl font-serif mb-3">Salon Operating System</h3>
+              <div className="w-14 h-14 bg-[#D4AF37]/10 text-[#D4AF37] flex items-center justify-center mb-6 rounded-full"><Settings className="w-6 h-6" /></div>
+              <h3 className="text-xl font-bold mb-3">Salon Operating System</h3>
               <p className="text-muted-foreground mb-4 text-sm">Ditch pen and paper. BeautyVerseOS is your complete B2B dashboard for staff management, dynamic pricing, and deep analytics.</p>
               <ul className="space-y-2 text-sm font-semibold text-muted-foreground">
                 <li className="flex items-center gap-2"><span className="text-primary">✓</span> AI Business Coach</li>
@@ -268,7 +269,7 @@ export function LayoutShowcase() {
               </div>
             ) : (
               <div className="p-12 text-center bg-muted/50 rounded-2xl border border-dashed border-border">
-                <span className="text-4xl mb-4 block">👀</span>
+                <Eye className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-xl font-bold">No providers found for this mode yet.</h3>
                 <p className="text-muted-foreground mt-2">Visibility rules successfully enforced. (Add dummy data to Supabase to see results)</p>
               </div>

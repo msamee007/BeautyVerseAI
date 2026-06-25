@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getCityById } from "@/lib/config/cities";
 import { createClient } from "@/lib/supabase/server";
-import { Salon3DViewer } from "@/components/Salon3DViewer";
+import { SalonHeroGallery } from "@/components/SalonHeroGallery";
+import { Star, MapPin, Clock, CircleUser, Activity } from "lucide-react";
 
 export default async function ProviderProfilePage({
   params,
@@ -40,22 +41,22 @@ export default async function ProviderProfilePage({
 
   // Expanded Image Pools for High Combinatorial Uniqueness
   const femaleStaffImages = [
-    "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?q=80&w=200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1595152452543-e5fc28ebc2b8?q=80&w=200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=200&auto=format&fit=crop"
+    "https://images.unsplash.com/photo-1554151228-14d9def656e4?q=80&w=200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1508214751196-bfd1432c4ce5?q=80&w=200&auto=format&fit=crop"
   ];
   
   const femalePortfolioBeforeAfter = [
     { cat: "Color Shift", b: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=600&auto=format&fit=crop", a: "https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=600&auto=format&fit=crop" },
     { cat: "Bridal", b: "https://images.unsplash.com/photo-1512413914421-4d3753549646?q=80&w=600&auto=format&fit=crop", a: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=600&auto=format&fit=crop" },
-    { cat: "Keratin", b: "https://images.unsplash.com/photo-1588691503387-a2ab2d0c6488?q=80&w=600&auto=format&fit=crop", a: "https://images.unsplash.com/photo-1600959954000-c9a9bb73a3a4?q=80&w=600&auto=format&fit=crop" },
+    { cat: "Keratin", b: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?q=80&w=600&auto=format&fit=crop", a: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?q=80&w=600&auto=format&fit=crop" },
     { cat: "Nail Art", b: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=600&auto=format&fit=crop", a: "https://images.unsplash.com/photo-1519014816548-bf5fe059e98b?q=80&w=600&auto=format&fit=crop" },
-    { cat: "Blowout", b: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?q=80&w=600&auto=format&fit=crop", a: "https://images.unsplash.com/photo-1560014022-3860bbdd57a9?q=80&w=600&auto=format&fit=crop" },
-    { cat: "Extensions", b: "https://images.unsplash.com/photo-1588691503387-a2ab2d0c6488?q=80&w=600&auto=format&fit=crop", a: "https://images.unsplash.com/photo-1595152452543-e5fc28ebc2b8?q=80&w=600&auto=format&fit=crop" }
+    { cat: "Blowout", b: "https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=600&auto=format&fit=crop", a: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop" },
+    { cat: "Extensions", b: "https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?q=80&w=600&auto=format&fit=crop", a: "https://images.unsplash.com/photo-1560014022-3860bbdd57a9?q=80&w=600&auto=format&fit=crop" }
   ];
 
   const maleStaffImages = [
@@ -76,11 +77,11 @@ export default async function ProviderProfilePage({
   ];
 
   const petStaffImages = [
-    "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1537368910025-7028ba482386?q=80&w=200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1558203728-00f45181b84e?q=80&w=200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?q=80&w=200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=200&auto=format&fit=crop"
+    "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=200&auto=format&fit=crop", // Woman holding dog
+    "https://images.unsplash.com/photo-1537368910025-7028ba482386?q=80&w=200&auto=format&fit=crop", // Man grooming
+    "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?q=80&w=200&auto=format&fit=crop", // Woman playing with dog
+    "https://images.unsplash.com/photo-1517331156700-3c241d2b4d83?q=80&w=200&auto=format&fit=crop", // Cats
+    "https://images.unsplash.com/photo-1522276498395-f4f68f7f8454?q=80&w=200&auto=format&fit=crop"  // Woman hugging dog
   ];
 
   const petPortfolioBeforeAfter = [
@@ -179,10 +180,10 @@ export default async function ProviderProfilePage({
   };
 
   const crowdStatusMap = {
-    low: { text: "🟢 Low Crowd", wait: "No wait", bg: "bg-green-100 dark:bg-green-900/30", textCol: "text-green-800 dark:text-green-400" },
-    moderate: { text: "🟡 Moderate", wait: `${p.estimated_wait_mins} min wait`, bg: "bg-amber-100 dark:bg-amber-900/30", textCol: "text-amber-800 dark:text-amber-400" },
-    busy: { text: "🟠 Busy", wait: `${p.estimated_wait_mins} min wait`, bg: "bg-orange-100 dark:bg-orange-900/30", textCol: "text-orange-800 dark:text-orange-400" },
-    very_busy: { text: "🔴 Very Busy", wait: `${p.estimated_wait_mins} min wait`, bg: "bg-red-100 dark:bg-red-900/30", textCol: "text-red-800 dark:text-red-400" },
+    low: { text: "Low Crowd", icon: <Activity className="w-4 h-4" />, wait: "No wait", bg: "bg-green-100 dark:bg-green-900/30", textCol: "text-green-800 dark:text-green-400" },
+    moderate: { text: "Moderate", icon: <Activity className="w-4 h-4" />, wait: `${p.estimated_wait_mins} min wait`, bg: "bg-amber-100 dark:bg-amber-900/30", textCol: "text-amber-800 dark:text-amber-400" },
+    busy: { text: "Busy", icon: <Activity className="w-4 h-4" />, wait: `${p.estimated_wait_mins} min wait`, bg: "bg-orange-100 dark:bg-orange-900/30", textCol: "text-orange-800 dark:text-orange-400" },
+    very_busy: { text: "Very Busy", icon: <Activity className="w-4 h-4" />, wait: `${p.estimated_wait_mins} min wait`, bg: "bg-red-100 dark:bg-red-900/30", textCol: "text-red-800 dark:text-red-400" },
   };
 
   const currentStatus = crowdStatusMap[p.status as keyof typeof crowdStatusMap] || crowdStatusMap.low;
@@ -201,7 +202,7 @@ export default async function ProviderProfilePage({
 
       {/* Hero Gallery Grid */}
       <div className="mb-12">
-        <Salon3DViewer category={detectedCategory} salonName={generatedName} accentColor={themeColor} />
+        <SalonHeroGallery category={detectedCategory} salonName={generatedName} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -212,18 +213,18 @@ export default async function ProviderProfilePage({
             <div className="flex justify-between items-start">
               <h1 className="text-4xl md:text-5xl font-bold">{p.name}</h1>
               <div className="text-right">
-                <div className={`px-4 py-2 rounded-full text-sm font-bold ${currentStatus.bg} ${currentStatus.textCol} inline-block mb-1`}>
-                  {currentStatus.text}
+                <div className={`px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 ${currentStatus.bg} ${currentStatus.textCol} inline-block mb-1`}>
+                  {currentStatus.icon} {currentStatus.text}
                 </div>
                 <p className="text-xs text-muted-foreground font-bold">{currentStatus.wait}</p>
               </div>
             </div>
-            <div className="flex items-center gap-4 text-muted-foreground">
-              <span className="font-bold text-foreground">⭐ {p.rating} ({p.reviews.length} reviews)</span>
+            <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
+              <span className="font-bold text-foreground flex items-center gap-1"><Star className="w-5 h-5 text-[#D4AF37] fill-[#D4AF37]" /> {p.rating} ({p.reviews.length} reviews)</span>
               <span>•</span>
               <span className="capitalize">{p.type}</span>
               <span>•</span>
-              <span>📍 {p.address}</span>
+              <span className="flex items-center gap-1"><MapPin className="w-4 h-4" /> {p.address}</span>
             </div>
           </div>
 
@@ -285,7 +286,7 @@ export default async function ProviderProfilePage({
                 <div key={service.id} className="flex justify-between items-center p-6 border border-border rounded-2xl hover:border-primary/50 transition-colors bg-card">
                   <div>
                     <h3 className="text-xl font-bold mb-1">{service.name}</h3>
-                    <p className="text-muted-foreground text-sm">⏱️ {service.duration_mins} mins</p>
+                    <p className="text-muted-foreground text-sm flex items-center gap-1"><Clock className="w-4 h-4" /> {service.duration_mins} mins</p>
                   </div>
                   <div className="text-right">
                     <p className="text-2xl font-bold mb-2">₹{service.price}</p>

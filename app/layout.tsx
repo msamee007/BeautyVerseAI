@@ -1,15 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display, Outfit } from "next/font/google";
+import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 const fontInter = Inter({
   variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const fontPlayfair = Playfair_Display({
-  variable: "--font-playfair",
   subsets: ["latin"],
 });
 
@@ -41,9 +36,9 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${fontInter.variable} ${fontPlayfair.variable} ${fontOutfit.variable} h-full antialiased`}
+      className={`${fontInter.variable} ${fontOutfit.variable} font-sans h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col transition-colors duration-500">
+      <body className="min-h-full flex flex-col transition-colors duration-500 font-sans">
         <ThemeProvider defaultMode="female">
           {children}
         </ThemeProvider>

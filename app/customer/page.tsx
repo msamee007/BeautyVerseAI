@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { searchProvidersByMode } from "@/lib/actions/providers";
 import { motion, AnimatePresence } from "framer-motion";
+import { Sparkles, Map } from "lucide-react";
 
 import { useTheme } from "@/components/ThemeProvider";
 
@@ -159,7 +160,9 @@ export default function CustomerDashboardPage() {
   return (
     <div className="space-y-8 relative min-h-[500px]">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold">Welcome back, {currentUser.name.split(' ')[0]}! ✨</h1>
+        <h1 className="text-3xl font-bold flex items-center gap-2">
+          Welcome back, {currentUser.name.split(' ')[0]}! <Sparkles className="w-8 h-8 text-primary" />
+        </h1>
         <div className="relative inline-block z-50">
           <button 
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -261,7 +264,7 @@ export default function CustomerDashboardPage() {
         {/* AI Recommendations */}
         <div className="bg-card border border-border rounded-3xl p-6">
           <div className="flex items-center gap-2 mb-6">
-            <span className="text-xl">✨</span>
+            <Sparkles className="w-6 h-6 text-primary" />
             <h3 className="text-xl font-bold">AI Recommendations for You</h3>
           </div>
           <p className="text-muted-foreground text-sm mb-6">{dynamicData.aiPrompt}</p>
@@ -291,7 +294,7 @@ export default function CustomerDashboardPage() {
       <div className="bg-card border border-border rounded-3xl p-6 mb-8 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
           <h3 className="text-xl font-bold flex items-center gap-2">
-            <span className="text-2xl">🗺️</span> Local Salons in {CITIES.find(c => c.id === activeCity)?.name}
+            <Map className="w-6 h-6 text-primary" /> Local Salons in {CITIES.find(c => c.id === activeCity)?.name}
           </h3>
         </div>
 

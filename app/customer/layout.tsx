@@ -5,6 +5,7 @@ import { ReactNode, useState } from "react";
 import { useTheme, ThemeMode, MOCK_PROFILES } from "@/components/ThemeProvider";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { LayoutDashboard, Calendar, Heart, Sparkles, Wallet, Settings, Trees, UserCircle, PawPrint, Building2, Landmark, Castle, Tent } from "lucide-react";
 
 export default function CustomerLayout({ children }: { children: ReactNode }) {
   const { mode, setMode, activeCity, setActiveCity, currentUser, setCurrentUser } = useTheme();
@@ -52,17 +53,17 @@ export default function CustomerLayout({ children }: { children: ReactNode }) {
   };
 
   const getModeEmoji = (m: ThemeMode) => {
-    return m === 'female' ? '🌴' : m === 'male' ? '🧔' : '🐾';
+    return m === 'female' ? <Trees className="w-20 h-20 text-rose-400" /> : m === 'male' ? <UserCircle className="w-20 h-20 text-blue-500" /> : <PawPrint className="w-20 h-20 text-amber-500" />;
   };
 
   const getCityEmoji = (c: string) => {
     switch(c) {
-      case 'mumbai': return '🏙️'; // Gateway / Skyline
-      case 'delhi': return '🏛️'; // India Gate
-      case 'pune': return '🏰'; // Shaniwar Wada
-      case 'hyderabad': return '🕌'; // Charminar
-      case 'bangalore': return '🏢'; // Tech Parks / Vidhana Soudha
-      default: return '📍';
+      case 'mumbai': return <Building2 className="w-20 h-20 text-primary" />;
+      case 'delhi': return <Landmark className="w-20 h-20 text-primary" />;
+      case 'pune': return <Castle className="w-20 h-20 text-primary" />;
+      case 'hyderabad': return <Tent className="w-20 h-20 text-primary" />;
+      case 'bangalore': return <Building2 className="w-20 h-20 text-primary" />;
+      default: return <Building2 className="w-20 h-20 text-primary" />;
     }
   };
 
@@ -80,7 +81,7 @@ export default function CustomerLayout({ children }: { children: ReactNode }) {
             <motion.div
               animate={{ scale: [1, 1.5, 1], rotate: [0, 5, -5, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
-              className="text-8xl mb-8"
+              className="mb-8 flex items-center justify-center"
             >
               {isModeLoading ? getModeEmoji(loadingMode) : getCityEmoji(loadingCity)}
             </motion.div>
@@ -99,19 +100,19 @@ export default function CustomerLayout({ children }: { children: ReactNode }) {
         </div>
         <nav className="flex-1 p-4 space-y-2">
           {[
-            { name: "Dashboard", icon: "📊", href: "/customer" },
-            { name: "My Bookings", icon: "📅", href: "/customer/bookings" },
-            { name: "Saved Salons", icon: "❤️", href: "/customer/saved" },
-            { name: "AI Consultations", icon: "✨", href: "/customer/consultations" },
-            { name: "Wallet & Offers", icon: "👛", href: "/customer/wallet" },
-            { name: "Settings", icon: "⚙️", href: "/customer/settings" },
+            { name: "Dashboard", icon: <LayoutDashboard className="w-5 h-5" />, href: "/customer" },
+            { name: "My Bookings", icon: <Calendar className="w-5 h-5" />, href: "/customer/bookings" },
+            { name: "Saved Salons", icon: <Heart className="w-5 h-5" />, href: "/customer/saved" },
+            { name: "AI Consultations", icon: <Sparkles className="w-5 h-5" />, href: "/customer/consultations" },
+            { name: "Wallet & Offers", icon: <Wallet className="w-5 h-5" />, href: "/customer/wallet" },
+            { name: "Settings", icon: <Settings className="w-5 h-5" />, href: "/customer/settings" },
           ].map((item) => (
             <Link
               key={item.name}
               href={item.href}
               className="flex items-center gap-3 px-4 py-3 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground transition-all font-medium"
             >
-              <span className="text-xl">{item.icon}</span>
+              <span className="flex items-center justify-center text-muted-foreground group-hover:text-foreground">{item.icon}</span>
               {item.name}
             </Link>
           ))}
@@ -127,31 +128,31 @@ export default function CustomerLayout({ children }: { children: ReactNode }) {
       <main className="flex-1 overflow-y-auto">
         <header className="h-16 bg-card border-b border-border flex items-center justify-between px-8 sticky top-0 z-[60]">
           {/* Mode Selector for Customer Portal */}
-          <div className="flex bg-muted p-1 rounded-lg">
+          <div className="flex bg-slate-100 p-1.5 rounded-xl border border-slate-200 shadow-inner">
             {(["female", "male", "pet"] as ThemeMode[]).map((m) => (
               <button
                 key={m}
                 onClick={() => handleModeChange(m)}
-                className={`px-4 py-1.5 rounded-md text-sm font-semibold transition-all duration-300 capitalize ${
-                  mode === m ? "bg-background text-foreground shadow-sm ring-1 ring-border" : "text-muted-foreground hover:text-foreground"
+                className={`px-5 py-2 rounded-lg text-sm font-bold transition-all duration-300 capitalize flex items-center gap-2 ${
+                  mode === m ? "bg-white text-slate-900 shadow-md ring-1 ring-slate-200 scale-105 z-10" : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
                 }`}
               >
-                {m === 'female' ? '🌴 Female' : m === 'male' ? '🧔 Male' : '🐾 Pet'}
+                {m === 'female' ? <span className="flex items-center gap-1"><Trees className="w-4 h-4"/> Female</span> : m === 'male' ? <span className="flex items-center gap-1"><UserCircle className="w-4 h-4"/> Male</span> : <span className="flex items-center gap-1"><PawPrint className="w-4 h-4"/> Pet</span>}
               </button>
             ))}
           </div>
 
           <div className="flex items-center gap-4">
             {/* City Selector injected into Navbar */}
-            <div className="flex bg-muted/50 p-1 rounded-lg border border-border">
+            <div className="flex bg-slate-100 p-1.5 rounded-xl border border-slate-200 shadow-inner">
               {CITIES.map((city) => (
                 <button
                   key={city.id}
                   onClick={() => handleCityChange(city.id)}
-                  className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all duration-300 ${
+                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all duration-300 ${
                     activeCity === city.id 
-                      ? "bg-primary text-primary-foreground shadow-md" 
-                      : "text-muted-foreground hover:bg-background hover:text-foreground"
+                      ? "bg-slate-900 text-white shadow-md scale-105 z-10" 
+                      : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
                   }`}
                 >
                   {city.name}

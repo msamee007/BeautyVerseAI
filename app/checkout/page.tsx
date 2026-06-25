@@ -12,10 +12,8 @@ export default function CheckoutPage() {
 
   // Simulated booking data
   const baseTotal = 3200;
-  const isPuneHomeService = true; // In real app, derived from Context/Route
-  const travelFee = isPuneHomeService ? 250 : 0;
   const discount = 500;
-  const grandTotal = baseTotal + travelFee - discount;
+  const grandTotal = baseTotal - discount;
 
   const handleCheckout = () => {
     // Simulate payment processing
@@ -32,28 +30,7 @@ export default function CheckoutPage() {
         {/* Payment Methods */}
         <div className="lg:col-span-2 space-y-8">
           
-          {/* Pune Specific Logic */}
-          {isPuneHomeService && (
-            <div className="p-6 bg-blue-50 border border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 rounded-2xl">
-              <h3 className="font-bold text-blue-900 dark:text-blue-400 mb-2 flex items-center gap-2">
-                🏠 Home Service Delivery (Pune)
-              </h3>
-              <div className="grid grid-cols-3 gap-4 mt-4">
-                <div>
-                  <p className="text-sm text-blue-700/70">Provider Distance</p>
-                  <p className="font-bold text-blue-800">4.2 km</p>
-                </div>
-                <div>
-                  <p className="text-sm text-blue-700/70">Estimated ETA</p>
-                  <p className="font-bold text-blue-800">18 mins</p>
-                </div>
-                <div>
-                  <p className="text-sm text-blue-700/70">Travel Fee</p>
-                  <p className="font-bold text-blue-800">₹{travelFee}</p>
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Removed Home Service specific logic */}
 
           <div className="bg-card border border-border rounded-3xl p-8">
             <h2 className="text-2xl font-bold mb-6">Payment Method</h2>
@@ -101,12 +78,7 @@ export default function CheckoutPage() {
                 <span className="text-muted-foreground">Keratin Treatment Pro</span>
                 <span className="font-bold">₹2000</span>
               </div>
-              {isPuneHomeService && (
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Travel Convenience Fee</span>
-                  <span className="font-bold">₹{travelFee}</span>
-                </div>
-              )}
+              {/* Travel fee removed from here */}
             </div>
 
             {/* Offers Engine */}

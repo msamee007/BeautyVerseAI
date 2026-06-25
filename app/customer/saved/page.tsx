@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useTheme } from "@/components/ThemeProvider";
 
 export default function SavedSalonsPage() {
+  const { mode, activeCity } = useTheme();
   const getImageUrl = (name: string, area: string) => {
     const hash = (name + area).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     
@@ -27,22 +29,45 @@ export default function SavedSalonsPage() {
     return femaleImages[hash % femaleImages.length];
   };
 
+  const getNames = (modeStr: string, hashVal: number) => {
+    if (modeStr === "male") {
+      const prefixes = ["Urban", "Alpha", "Classic", "Prime", "Elite"];
+      const suffixes = ["Barbers", "Lounge", "Fades", "Cuts", "Studio"];
+      return `${prefixes[hashVal % prefixes.length]} ${suffixes[(hashVal + 1) % suffixes.length]}`;
+    } else if (modeStr === "pet") {
+      const prefixes = ["Paws", "Fluffy", "Hound", "Bark", "Purrfect"];
+      const suffixes = ["Spa", "Boutique", "Tails", "Retreat", "Grooming"];
+      return `${prefixes[hashVal % prefixes.length]} ${suffixes[(hashVal + 1) % suffixes.length]}`;
+    } else {
+      const prefixes = ["Grand", "Luxe", "Urban", "Elegance", "Velvet"];
+      const suffixes = ["Aesthetic Studio", "Nail Bar", "Glow", "Hair Hub", "Rose Spa"];
+      return `${prefixes[hashVal % prefixes.length]} ${suffixes[(hashVal + 1) % suffixes.length]}`;
+    }
+  };
+
+  const activeLocality = activeCity === "mumbai" ? "Bandra West" :
+                         activeCity === "bangalore" ? "Indiranagar" :
+                         activeCity === "delhi" ? "Saket" :
+                         activeCity === "pune" ? "Kothrud" : "Jubilee Hills";
+
+  const hashStr = activeCity + activeLocality + mode;
+  const baseHash = hashStr.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+
   const savedSalons = [
-    { id: "1", name: "The Grand Aesthetic Studio", rating: "4.9", city: "mumbai", area: "Bandra West", img: getImageUrl("The Grand Aesthetic Studio", "Bandra West") },
-    { id: "2", name: "Urban Alpha Barbershop", rating: "4.8", city: "bangalore", area: "Indiranagar", img: getImageUrl("Urban Alpha Barbershop", "Indiranagar") },
-    { id: "3", name: "Paws & Bubbles Spa", rating: "4.9", city: "hyderabad", area: "Jubilee Hills", img: getImageUrl("Paws & Bubbles Spa", "Jubilee Hills") },
+    { id: "1", name: getNames(mode, baseHash), rating: "4.9", city: activeCity, area: activeLocality, img: getImageUrl(getNames(mode, baseHash), activeLocality) },
+    { id: "2", name: getNames(mode, baseHash + 1), rating: "4.7", city: activeCity, area: activeLocality, img: getImageUrl(getNames(mode, baseHash + 1), activeLocality) },
   ];
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <h1 className="text-3xl font-bold">Saved Providers ❤️</h1>
+      <h1 className="text-3xl font-bold">Saved Providers</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {savedSalons.map((salon) => (
           <div key={salon.id} className="bg-card border border-border rounded-3xl overflow-hidden hover:shadow-xl transition-shadow group cursor-pointer flex flex-col">
             <div className="h-40 bg-cover bg-center relative" style={{ backgroundImage: `url(${salon.img})` }}>
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-              <button className="absolute top-4 right-4 w-10 h-10 bg-background/80 backdrop-blur rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform z-10">
+              <button className="absolute top-4 right-4 w-10 h-10 bg-background/80 backdrop-blur rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform z-10 text-red-500">
                 ❤️
               </button>
             </div>

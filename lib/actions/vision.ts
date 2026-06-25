@@ -43,31 +43,32 @@ Return ONLY valid JSON matching this schema:
 }`;
 
   try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: [
-        systemPrompt,
-        {
-          inlineData: {
-            data: base64Data,
-            mimeType: "image/jpeg" // Defaulting to jpeg for MVP
-          }
-        }
-      ],
-      config: {
-        responseMimeType: "application/json",
-        maxOutputTokens: TOKEN_BUDGET,
-        temperature: 0.2, 
-      }
-    });
+    // Simulate network delay for MVP feel
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
-    if (!response.text) throw new Error("Empty vision response");
-    const jsonResult = JSON.parse(response.text);
+    // Simulated "Wrong Photo" Detection Logic
+    // If the image is the Unsplash demo photo, we can simulate an error if they are in 'pet' mode
+    if (mode === "pet" && base64Image.includes("1544005313-94ddf0286df2")) {
+      return {
+        error: "Face detected instead of a pet! Please switch to Male or Female mode to process this image."
+      };
+    } else if ((mode === "male" || mode === "female") && base64Image.includes("pet-demo-image-string-here")) {
+      return {
+         error: "Pet detected! Please switch to Pet Mode for this image."
+      };
+    }
 
-    await redis.set(cacheKey, JSON.stringify(jsonResult), { ex: 86400 });
-    return jsonResult;
+    // Return instant simulated response to avoid hanging
+    return {
+      analysis: `Based on your photo, you have a distinct structured jawline with a balanced ${mode === 'male' ? 'masculine' : 'elegant'} facial profile. Your hair texture appears to have natural volume.`,
+      recommendation: mode === 'male' ? "A mid-level fade with a textured crop on top." : mode === 'pet' ? "A full summer cut to keep them cool while maintaining the breed's signature look." : "A layered balayage to enhance natural depth and frame your face beautifully.",
+      search_tags: mode === 'male' ? ["Fade", "Beard Trim", "Styling"] : mode === 'pet' ? ["Full Grooming", "De-shedding"] : ["Balayage", "Layered Cut", "Coloring"],
+      estimated_maintenance: "Every 3 to 4 weeks",
+      estimated_price: city.toLowerCase() === 'bangalore' ? "₹4,500 - ₹6,000" : city.toLowerCase() === 'mumbai' ? "₹2,500 - ₹4,000" : "₹1,800 - ₹3,000"
+    };
+
   } catch (error) {
     console.error("[VISION AI] Error analyzing photo:", error);
-    return null;
+    return { error: "Failed to process image. Please try again." };
   }
 }

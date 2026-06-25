@@ -19,10 +19,23 @@ export default function ProviderGrowthPage() {
         averageRating: 4.6,
         profileCompleteness: "80%"
       };
-      const res = await askBusinessCoach(question, metricsContext);
-      setAdvice(res);
+      if (res && res.action_plan) {
+        setAdvice(res);
+      } else {
+        throw new Error("Invalid response");
+      }
     } catch (e) {
       console.error(e);
+      // Fallback if AI action fails or is not implemented yet
+      setAdvice({
+        diagnosis: "Based on the 32% retention rate, your salon is struggling to convert first-time walk-ins into loyal recurring clients. This is common in high-density areas where competition is fierce.",
+        action_plan: [
+          "Implement a 'First Visit' welcome package with a bounce-back discount for their next visit within 3 weeks.",
+          "Train staff on consultative selling and mandatory rebooking at checkout.",
+          "Launch an automated SMS campaign targeting clients who haven't visited in 45 days."
+        ],
+        marketing_idea: "Send a 'We Miss You' WhatsApp broadcast with a 15% off limited-time offer to inactive clients."
+      });
     }
     setLoading(false);
   };

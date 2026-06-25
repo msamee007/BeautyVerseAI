@@ -58,8 +58,8 @@ export async function searchProvidersByMode(mode: ThemeMode, city?: string, loca
 
     const getMockNames = (cat: string) => {
       if (cat === "pet_grooming") {
-        const prefixes = ["Paws", "Fluffy", "Happy", "Furry", "Bark", "Purrfect", "Snouts", "Luxury", "Bow Wow", "Wagging"];
-        const suffixes = ["Spa", "Boutique", "Tails", "Retreat", "Grooming", "Whiskers", "Wash", "Salon"];
+        const prefixes = ["Paws", "Fluffy", "Hound", "Furry", "Bark", "Purrfect", "Snouts", "Meow", "Bow Wow", "Wagging"];
+        const suffixes = ["Pet Spa", "Boutique", "Tails", "Retreat", "Pet Grooming", "Whiskers", "Dog Wash", "Pet Salon"];
         return [
           `${prefixes[hash % prefixes.length]} ${suffixes[(hash + 1) % suffixes.length]}`,
           `${prefixes[(hash + 2) % prefixes.length]} ${suffixes[(hash + 3) % suffixes.length]}`

@@ -2,12 +2,20 @@
 
 import { useTheme } from "@/components/ThemeProvider";
 
+import { useState } from "react";
+
 export default function WalletPage() {
   const { mode } = useTheme();
+  const [toastMessage, setToastMessage] = useState("");
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <h1 className="text-3xl font-bold">Wallet & Offers 👛</h1>
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 relative">
+      {toastMessage && (
+        <div className="fixed top-4 right-4 bg-primary text-primary-foreground px-6 py-3 rounded-xl shadow-xl font-bold animate-in slide-in-from-top-4 z-50">
+          {toastMessage}
+        </div>
+      )}
+      <h1 className="text-3xl font-bold">Wallet & Offers</h1>
 
       {/* Wallet Balance Card */}
       <div className="bg-gradient-to-r from-primary to-blue-500 rounded-3xl p-8 text-primary-foreground relative overflow-hidden shadow-xl">
@@ -16,8 +24,18 @@ export default function WalletPage() {
           <p className="text-primary-foreground/80 font-semibold mb-2 tracking-widest uppercase text-sm">Available Balance</p>
           <h2 className="text-6xl font-extrabold mb-6">₹1,240</h2>
           <div className="flex gap-4">
-            <button className="bg-background text-foreground px-6 py-2 rounded-full font-bold hover:opacity-90 transition-opacity">Add Money</button>
-            <button className="bg-primary-foreground/20 text-primary-foreground px-6 py-2 rounded-full font-bold border border-primary-foreground/30 hover:bg-primary-foreground/30 transition-colors">View History</button>
+            <button 
+              onClick={() => { setToastMessage("Redirecting to Payment Gateway..."); setTimeout(() => setToastMessage(""), 3000); }}
+              className="bg-background text-foreground px-6 py-2 rounded-full font-bold hover:opacity-90 transition-opacity"
+            >
+              Add Money
+            </button>
+            <button 
+              onClick={() => { setToastMessage("Fetching transaction history..."); setTimeout(() => setToastMessage(""), 3000); }}
+              className="bg-primary-foreground/20 text-primary-foreground px-6 py-2 rounded-full font-bold border border-primary-foreground/30 hover:bg-primary-foreground/30 transition-colors"
+            >
+              View History
+            </button>
           </div>
         </div>
       </div>
@@ -45,9 +63,14 @@ export default function WalletPage() {
                   <p className="font-bold text-lg">{offer.title}</p>
                   <p className="text-sm text-muted-foreground">{offer.validity}</p>
                 </div>
-                <div className="text-right">
+                <div className="text-right flex flex-col items-end">
                   <span className="bg-primary/10 text-primary px-3 py-1 rounded-md font-mono font-bold tracking-widest block mb-2">{offer.code}</span>
-                  <button className="text-xs font-bold hover:underline text-muted-foreground">Copy Code</button>
+                  <button 
+                    onClick={() => { setToastMessage(`Code ${offer.code} copied!`); setTimeout(() => setToastMessage(""), 3000); }}
+                    className="text-xs font-bold hover:underline text-muted-foreground"
+                  >
+                    Copy Code
+                  </button>
                 </div>
               </div>
             ))}

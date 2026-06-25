@@ -66,7 +66,7 @@ export default function LeafletMap({
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
         
-        {providers.map((p) => (
+        {providers.filter(p => p.name && p.name !== "Undefined").map((p) => (
           <Marker key={p.id} position={[p.lat, p.lng]} icon={customIcon}>
             <Popup className="rounded-xl">
               <div className="font-sans">

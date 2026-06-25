@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 import { analyzeUserPhoto } from "@/lib/actions/vision";
 import { motion, AnimatePresence } from "framer-motion";
+import { Camera, Sparkles, ArrowLeft, Image as ImageIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function VisionConsultationPage() {
   const { mode } = useTheme();
@@ -11,6 +13,7 @@ export default function VisionConsultationPage() {
   const [consultationType, setConsultationType] = useState("hairstyle");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const [photoError, setPhotoError] = useState("");
 
   const getTypesForMode = () => {
     switch (mode) {
@@ -22,6 +25,7 @@ export default function VisionConsultationPage() {
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPhotoError("");
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -33,7 +37,11 @@ export default function VisionConsultationPage() {
   };
 
   const handleAnalyze = async () => {
-    if (!photo) return;
+    if (!photo) {
+      setPhotoError("Please upload a clear selfie or use the demo photo first.");
+      return;
+    }
+    setPhotoError("");
     setLoading(true);
     const analysis = await analyzeUserPhoto(photo, mode, consultationType);
     setResult(analysis);
@@ -41,7 +49,15 @@ export default function VisionConsultationPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      {/* Navigation */}
+      <div className="mb-8">
+        <Link href="/customer/consultations" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors font-bold">
+          <ArrowLeft className="w-5 h-5" />
+          Back to Dashboard
+        </Link>
+      </div>
+
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold mb-4">AI Photo Consultation</h1>
         <p className="text-xl text-muted-foreground">
@@ -52,23 +68,51 @@ export default function VisionConsultationPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Upload & Controls */}
         <div className="space-y-6">
-          <div className="border-2 border-dashed border-border rounded-3xl p-8 text-center hover:border-primary transition-colors cursor-pointer relative bg-card">
-            <input 
-              type="file" 
-              accept="image/*" 
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              onChange={handleFileUpload}
-            />
+          <div className="border-2 border-dashed border-border rounded-3xl p-8 text-center hover:border-primary transition-colors relative bg-card flex flex-col items-center justify-center min-h-[300px]">
+            {!photo && (
+              <input 
+                type="file" 
+                accept="image/*" 
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                onChange={handleFileUpload}
+              />
+            )}
             {photo ? (
-              <img src={photo} alt="Upload Preview" className="mx-auto max-h-64 rounded-xl object-cover" />
+              <div className="relative w-full">
+                <img src={photo} alt="Upload Preview" className="mx-auto max-h-64 rounded-xl object-cover shadow-lg" />
+                <button 
+                  onClick={() => setPhoto(null)} 
+                  className="mt-4 px-4 py-2 bg-muted text-muted-foreground font-bold text-sm rounded-full hover:bg-secondary transition-colors"
+                >
+                  Remove Photo
+                </button>
+              </div>
             ) : (
-              <div className="py-12">
-                <span className="text-6xl mb-4 block">📸</span>
+              <div className="py-12 flex flex-col items-center">
+                <Camera className="w-16 h-16 text-muted-foreground mb-4 block" />
                 <p className="font-bold text-lg">Tap to upload a clear selfie</p>
                 <p className="text-sm text-muted-foreground mt-2">JPEG or PNG</p>
+                
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setPhotoError("");
+                    const demoImg = mode === 'pet' 
+                      ? "https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=800&auto=format&fit=crop" 
+                      : "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop";
+                    setPhoto(demoImg);
+                  }}
+                  className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-secondary text-secondary-foreground rounded-full text-sm font-bold hover:bg-secondary/80 transition-colors z-20 relative"
+                >
+                  <ImageIcon className="w-4 h-4" />
+                  Use Demo Photo
+                </button>
               </div>
             )}
           </div>
+          {photoError && (
+            <p className="text-red-500 font-bold text-sm text-center animate-in fade-in slide-in-from-top-2">{photoError}</p>
+          )}
 
           <div>
             <label className="block text-sm font-bold mb-2">What do you want to analyze?</label>
@@ -91,7 +135,7 @@ export default function VisionConsultationPage() {
 
           <button 
             onClick={handleAnalyze}
-            disabled={!photo || loading}
+            disabled={loading}
             className="w-full py-4 bg-foreground text-background rounded-xl font-bold text-lg hover:opacity-90 disabled:opacity-50 transition-opacity"
           >
             {loading ? "Analyzing..." : "Start Consultation"}
@@ -107,7 +151,7 @@ export default function VisionConsultationPage() {
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center"
               >
-                <span className="text-6xl mb-4 opacity-20">✨</span>
+                <Sparkles className="w-16 h-16 text-muted-foreground opacity-20 mb-4" />
                 <h3 className="text-xl font-bold text-muted-foreground">Your expert analysis will appear here.</h3>
               </motion.div>
             )}
@@ -130,10 +174,26 @@ export default function VisionConsultationPage() {
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 className="space-y-6"
               >
-                <div>
-                  <h3 className="text-sm uppercase tracking-wider text-primary font-bold mb-2">Deep Analysis</h3>
-                  <p className="text-lg leading-relaxed">{result.analysis}</p>
-                </div>
+                {result.error ? (
+                  <div className="flex flex-col items-center justify-center p-8 text-center text-red-500">
+                    <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-4">
+                      <Sparkles className="w-8 h-8 text-red-600 dark:text-red-400" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-2">Analysis Failed</h3>
+                    <p className="text-muted-foreground">{result.error}</p>
+                    <button 
+                      onClick={() => { setResult(null); setPhoto(null); }}
+                      className="mt-6 px-6 py-2 bg-red-500 text-white rounded-full font-bold hover:bg-red-600 transition-colors"
+                    >
+                      Try Again
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div>
+                      <h3 className="text-sm uppercase tracking-wider text-primary font-bold mb-2">Deep Analysis</h3>
+                      <p className="text-lg leading-relaxed">{result.analysis}</p>
+                    </div>
                 
                 <div>
                   <h3 className="text-sm uppercase tracking-wider text-green-600 font-bold mb-2">Expert Recommendation</h3>
@@ -158,6 +218,8 @@ export default function VisionConsultationPage() {
                     Find Stylists Near Me
                   </button>
                 </div>
+                </>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
