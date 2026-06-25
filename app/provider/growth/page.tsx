@@ -19,6 +19,7 @@ export default function ProviderGrowthPage() {
         averageRating: 4.6,
         profileCompleteness: "80%"
       };
+      const res = await askBusinessCoach(question, metricsContext);
       if (res && res.action_plan) {
         setAdvice(res);
       } else {
