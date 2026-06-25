@@ -25,7 +25,7 @@ Here are their current business metrics (mock data):
 ${JSON.stringify(metricsContext, null, 2)}
 
 Provide actionable, hyper-practical advice. Do not be generic. Be decisive.
-Return ONLY valid JSON matching this schema:
+Return ONLY valid JSON matching this schema. CRITICAL: Do NOT use raw newlines inside string values. Keep all text on a single line per field, or escape newlines properly as \\n.
 {
   "diagnosis": "A 2-sentence diagnosis of their current situation based on metrics",
   "action_plan": ["Specific action 1", "Specific action 2", "Specific action 3"],
