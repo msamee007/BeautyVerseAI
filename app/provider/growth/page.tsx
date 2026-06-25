@@ -20,22 +20,28 @@ export default function ProviderGrowthPage() {
         profileCompleteness: "80%"
       };
       const res = await askBusinessCoach(question, metricsContext);
+      
+      if (res && res.error) {
+        setAdvice({
+          diagnosis: `SYSTEM ERROR: ${res.message}`,
+          action_plan: ["Check Vercel Environment Variables", "Ensure GEMINI_API_KEY is set", "Check Vercel Build Logs"],
+          marketing_idea: "Fix deployment configuration."
+        });
+        setLoading(false);
+        return;
+      }
+
       if (res && res.action_plan) {
         setAdvice(res);
       } else {
-        throw new Error("Invalid response");
+        throw new Error("Invalid response format from Gemini");
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      // Fallback if AI action fails or is not implemented yet
       setAdvice({
-        diagnosis: "Based on the 32% retention rate, your salon is struggling to convert first-time walk-ins into loyal recurring clients. This is common in high-density areas where competition is fierce.",
-        action_plan: [
-          "Implement a 'First Visit' welcome package with a bounce-back discount for their next visit within 3 weeks.",
-          "Train staff on consultative selling and mandatory rebooking at checkout.",
-          "Launch an automated SMS campaign targeting clients who haven't visited in 45 days."
-        ],
-        marketing_idea: "Send a 'We Miss You' WhatsApp broadcast with a 15% off limited-time offer to inactive clients."
+        diagnosis: `CLIENT ERROR: ${e.message}`,
+        action_plan: ["Check network connection", "Check console logs"],
+        marketing_idea: "N/A"
       });
     }
     setLoading(false);

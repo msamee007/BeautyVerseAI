@@ -44,14 +44,20 @@ Return ONLY valid JSON matching this schema:
     });
 
     if (!response.text) throw new Error("Empty coach response");
-    const jsonResult = JSON.parse(response.text);
+    
+    // Strip potential markdown formatting
+    const rawText = response.text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    const jsonResult = JSON.parse(rawText);
 
     try {
       await redis.set(cacheKey, JSON.stringify(jsonResult), { ex: 86400 });
     } catch(e) {}
     return jsonResult;
-  } catch (error) {
+  } catch (error: any) {
     console.error("[COACH AI] Error:", error);
-    return null;
+    return { 
+      error: true, 
+      message: error.message || "Failed to contact Gemini API. Did you add GEMINI_API_KEY to Vercel?"
+    };
   }
 }
