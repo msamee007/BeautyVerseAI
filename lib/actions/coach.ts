@@ -10,9 +10,13 @@ export async function askBusinessCoach(question: string, metricsContext: any) {
   const contextHash = crypto.createHash('sha256').update(question + JSON.stringify(metricsContext)).digest('hex');
   const cacheKey = `gemini:coach:${contextHash}`;
 
-  const cachedResponse = await redis.get(cacheKey);
-  if (cachedResponse) {
-    return typeof cachedResponse === 'string' ? JSON.parse(cachedResponse) : cachedResponse;
+  try {
+    const cachedResponse = await redis.get(cacheKey);
+    if (cachedResponse) {
+      return typeof cachedResponse === 'string' ? JSON.parse(cachedResponse) : cachedResponse;
+    }
+  } catch(e) {
+    console.error("Redis cache error:", e);
   }
 
   const systemPrompt = `You are an elite Business Consultant and Growth Advisor for Salon Owners on the BeautyVerse AI platform.
@@ -31,10 +35,7 @@ Return ONLY valid JSON matching this schema:
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
-      contents: [
-        systemPrompt,
-        question
-      ],
+      contents: `${systemPrompt}\n\nUser Question:\n${question}`,
       config: {
         responseMimeType: "application/json",
         maxOutputTokens: 1000,
@@ -45,7 +46,9 @@ Return ONLY valid JSON matching this schema:
     if (!response.text) throw new Error("Empty coach response");
     const jsonResult = JSON.parse(response.text);
 
-    await redis.set(cacheKey, JSON.stringify(jsonResult), { ex: 86400 });
+    try {
+      await redis.set(cacheKey, JSON.stringify(jsonResult), { ex: 86400 });
+    } catch(e) {}
     return jsonResult;
   } catch (error) {
     console.error("[COACH AI] Error:", error);
