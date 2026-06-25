@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Default: Female Beauty Mode (Elegant, Premium, Luxury) */
+  :root {
+    --background: 30 50% 98%; /* Soft Cream */
+    --foreground: 20 14% 4%; /* Dark Brownish Black */
+    --card: 0 0% 100%;
+    --card-foreground: 20 14% 4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 14% 4%;
+    --primary: 346 45% 65%; /* Rose Gold */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 346 30% 90%; /* Light Rose */
+    --secondary-foreground: 346 45% 20%;
+    --muted: 30 20% 94%;
+    --muted-foreground: 30 10% 40%;
+    --accent: 30 30% 90%;
+    --accent-foreground: 30 10% 20%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 30 20% 85%;
+    --input: 30 20% 85%;
+    --ring: 346 45% 65%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 20 14% 6%;
+    --foreground: 30 50% 98%;
+    --card: 20 14% 8%;
+    --card-foreground: 30 50% 98%;
+    --popover: 20 14% 8%;
+    --popover-foreground: 30 50% 98%;
+    --primary: 346 45% 65%;
+    --primary-foreground: 20 14% 6%;
+    --secondary: 346 30% 20%;
+    --secondary-foreground: 346 30% 90%;
+    --muted: 20 10% 15%;
+    --muted-foreground: 30 10% 60%;
+    --accent: 20 10% 20%;
+    --accent-foreground: 30 10% 90%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 30 50% 98%;
+    --border: 20 10% 20%;
+    --input: 20 10% 20%;
+    --ring: 346 45% 65%;
+  }
+
+  /* Male Grooming Mode (Modern, Sharp, Masculine) */
+  [data-theme='male'] {
+    --background: 220 10% 96%; /* Light Ash */
+    --foreground: 220 20% 10%; /* Charcoal */
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 10%;
+    --primary: 210 100% 50%; /* Ice Blue */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 20% 90%;
+    --secondary-foreground: 210 100% 20%;
+    --muted: 220 10% 90%;
+    --muted-foreground: 220 10% 40%;
+    --accent: 220 15% 90%;
+    --accent-foreground: 220 20% 20%;
+    --border: 220 15% 85%;
+    --input: 220 15% 85%;
+    --ring: 210 100% 50%;
+    --radius: 0.25rem; /* Sharper edges */
+  }
+
+  [data-theme='male'].dark {
+    --background: 220 20% 8%; /* Deep Charcoal */
+    --foreground: 220 10% 96%;
+    --card: 220 20% 10%;
+    --card-foreground: 220 10% 96%;
+    --popover: 220 20% 10%;
+    --popover-foreground: 220 10% 96%;
+    --primary: 210 100% 60%; /* Bright Ice Blue */
+    --primary-foreground: 220 20% 8%;
+    --secondary: 210 50% 20%;
+    --secondary-foreground: 210 20% 90%;
+    --muted: 220 15% 15%;
+    --muted-foreground: 220 10% 60%;
+    --accent: 220 20% 20%;
+    --accent-foreground: 220 10% 90%;
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
+    --ring: 210 100% 60%;
+  }
+
+  /* Pet Grooming Mode (Friendly, Premium) */
+  [data-theme='pet'] {
+    --background: 45 40% 98%; /* Warm Off-White */
+    --foreground: 30 20% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 30 20% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 30 20% 15%;
+    --primary: 35 90% 55%; /* Warm Amber */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 120 20% 90%; /* Sage Green Tint */
+    --secondary-foreground: 120 30% 20%;
+    --muted: 45 20% 90%;
+    --muted-foreground: 45 10% 45%;
+    --accent: 45 30% 90%;
+    --accent-foreground: 45 20% 25%;
+    --border: 45 20% 85%;
+    --input: 45 20% 85%;
+    --ring: 35 90% 55%;
+    --radius: 1.5rem; /* Very rounded edges for friendly feel */
+  }
+
+  [data-theme='pet'].dark {
+    --background: 30 20% 10%;
+    --foreground: 45 40% 98%;
+    --card: 30 20% 12%;
+    --card-foreground: 45 40% 98%;
+    --popover: 30 20% 12%;
+    --popover-foreground: 45 40% 98%;
+    --primary: 35 90% 60%; /* Warm Amber */
+    --primary-foreground: 30 20% 10%;
+    --secondary: 120 20% 25%; /* Deep Sage */
+    --secondary-foreground: 120 20% 90%;
+    --muted: 30 15% 20%;
+    --muted-foreground: 45 10% 65%;
+    --accent: 30 20% 25%;
+    --accent-foreground: 45 20% 90%;
+    --border: 30 15% 25%;
+    --input: 30 15% 25%;
+    --ring: 35 90% 60%;
+  }
+
+  /* Provider Mode (Professional) */
+  [data-theme='provider'] {
+    --background: 0 0% 98%; /* Crisp White */
+    --foreground: 240 10% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 10%;
+    --primary: 240 60% 40%; /* Deep Indigo */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 20% 92%;
+    --secondary-foreground: 240 60% 20%;
+    --muted: 240 10% 92%;
+    --muted-foreground: 240 10% 40%;
+    --accent: 240 20% 92%;
+    --accent-foreground: 240 20% 20%;
+    --border: 240 10% 85%;
+    --input: 240 10% 85%;
+    --ring: 240 60% 40%;
+    --radius: 0.5rem; /* Standard rounded edges */
+  }
+
+  [data-theme='provider'].dark {
+    --background: 240 10% 8%; /* Very Dark Indigo */
+    --foreground: 0 0% 98%;
+    --card: 240 10% 10%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 10%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 240 60% 60%; /* Soft Indigo */
+    --primary-foreground: 240 10% 8%;
+    --secondary: 240 20% 20%;
+    --secondary-foreground: 240 20% 90%;
+    --muted: 240 10% 15%;
+    --muted-foreground: 240 10% 60%;
+    --accent: 240 15% 20%;
+    --accent-foreground: 240 10% 90%;
+    --border: 240 10% 20%;
+    --input: 240 10% 20%;
+    --ring: 240 60% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+}
