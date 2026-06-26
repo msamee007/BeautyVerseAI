@@ -29,9 +29,45 @@ export default function VisionConsultationPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Check size - warn if > 5MB before even trying
+    if (file.size > 5 * 1024 * 1024) {
+      setPhotoError("Image is too large. Please select a smaller photo (under 5MB).");
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = (event) => {
-      setPhoto(event.target?.result as string);
+      const img = new window.Image();
+      img.onload = () => {
+        // Compress image using canvas
+        const canvas = document.createElement("canvas");
+        const MAX_WIDTH = 800;
+        const MAX_HEIGHT = 800;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx?.drawImage(img, 0, 0, width, height);
+        
+        // Convert to high-compression JPEG
+        const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+        setPhoto(compressedBase64);
+      };
+      img.src = event.target?.result as string;
     };
     reader.readAsDataURL(file);
   };
@@ -43,9 +79,18 @@ export default function VisionConsultationPage() {
     }
     setPhotoError("");
     setLoading(true);
-    const analysis = await analyzeUserPhoto(photo, mode, consultationType);
-    setResult(analysis);
-    setLoading(false);
+    
+    try {
+      const analysis = await analyzeUserPhoto(photo, mode, consultationType);
+      setResult(analysis);
+    } catch (e: any) {
+      console.error(e);
+      setResult({
+        error: "Failed to communicate with the AI server. The image might be too large, or your internet connection was interrupted."
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
