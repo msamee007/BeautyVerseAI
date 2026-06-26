@@ -1,16 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { generateSocialPost } from "@/lib/actions/marketing";
 
 export default function MarketingPage() {
   const [generating, setGenerating] = useState(false);
   const [postIdea, setPostIdea] = useState("");
+  const [topic, setTopic] = useState("Keratin Spa");
+  const [broadcastState, setBroadcastState] = useState("idle");
+  const [storeName, setStoreName] = useState("Premium Salon");
+  const [city, setCity] = useState("Mumbai");
 
-  const handleGenerate = () => {
+  useEffect(() => {
+    const s = localStorage.getItem("provider_store");
+    const c = localStorage.getItem("provider_city");
+    if (s) setStoreName(s);
+    if (c) setCity(c);
+  }, []);
+
+  const handleGenerate = async () => {
     setGenerating(true);
+    const res = await generateSocialPost(topic, storeName, city);
+    setPostIdea(res.error || res.post);
+    setGenerating(false);
+  };
+
+  const handleBroadcast = () => {
+    setBroadcastState("broadcasting");
     setTimeout(() => {
-      setPostIdea("✨ Glow up this weekend at The Grand Aesthetic Studio! 💅 Book a Keratin Spa today and get a complimentary Hair Trim. Limited slots available. Link in bio to secure your spot! 🌟 #MumbaiSalon #KeratinTreatment #GlowUp");
-      setGenerating(false);
+      setBroadcastState("done");
     }, 1500);
   };
 
@@ -36,8 +54,16 @@ export default function MarketingPage() {
           <div className="bg-primary/5 p-4 rounded-2xl border border-primary/20">
             <p className="font-bold text-primary mb-2">Suggested Campaign:</p>
             <p className="text-sm text-muted-foreground mb-4">"Last Minute 20% Off - Tomorrow 11 AM to 3 PM"</p>
-            <button className="w-full bg-primary text-primary-foreground py-2 rounded-lg font-bold hover:opacity-90 transition-all">
-              Broadcast to Nearby Users
+            <button 
+              onClick={handleBroadcast}
+              disabled={broadcastState !== "idle"}
+              className={`w-full py-2 rounded-lg font-bold transition-all ${
+                broadcastState === "done" 
+                  ? "bg-green-500 text-white" 
+                  : "bg-primary text-primary-foreground hover:opacity-90"
+              }`}
+            >
+              {broadcastState === "idle" ? "Broadcast to Nearby Users" : broadcastState === "broadcasting" ? "Broadcasting..." : "Broadcast Live ✓"}
             </button>
           </div>
           <p className="text-xs text-muted-foreground text-center">Broadcasts appear on the BeautyVerse AI Marketplace homepage for users within 5km.</p>
@@ -54,10 +80,14 @@ export default function MarketingPage() {
           </div>
 
           <div className="space-y-3">
-            <select className="w-full bg-muted border border-border p-3 rounded-xl text-sm outline-none">
-              <option>Promote: Keratin Spa</option>
-              <option>Promote: Bridal Package</option>
-              <option>Promote: Weekend Haircut</option>
+            <select 
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              className="w-full bg-muted border border-border p-3 rounded-xl text-sm outline-none"
+            >
+              <option value="Keratin Spa">Promote: Keratin Spa</option>
+              <option value="Bridal Package">Promote: Bridal Package</option>
+              <option value="Weekend Haircut">Promote: Weekend Haircut</option>
             </select>
             <button 
               onClick={handleGenerate}

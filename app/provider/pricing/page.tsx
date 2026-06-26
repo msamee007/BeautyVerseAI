@@ -1,6 +1,14 @@
 import Link from "next/link";
+import { useState } from "react";
 
 export default function PricingIntelligencePage() {
+  const [reviewState, setReviewState] = useState("idle");
+
+  const handleReview = () => {
+    setReviewState("calculating");
+    setTimeout(() => setReviewState("done"), 1500);
+  };
+
   return (
     <div className="space-y-8 max-w-5xl">
       <div>
@@ -18,8 +26,13 @@ export default function PricingIntelligencePage() {
             Your salon is rated <span className="font-bold text-foreground">4.8⭐</span>. Similar highly-rated salons in <span className="font-bold text-foreground">Bandra West</span> charge an average of <strong>₹2,500</strong> for a Haircut & Blowdry, but you are currently charging <strong>₹1,800</strong>. You could safely increase your price by 15-20% without impacting booking volume.
           </p>
         </div>
-        <button className="px-6 py-2 bg-amber-500 text-white rounded-full font-bold whitespace-nowrap hover:bg-amber-600 transition-colors">
-          Review Pricing
+        <button 
+          onClick={handleReview}
+          disabled={reviewState !== "idle"}
+          className={`px-6 py-2 text-white rounded-full font-bold whitespace-nowrap transition-colors ${
+            reviewState === "done" ? "bg-green-500" : "bg-amber-500 hover:bg-amber-600"
+          }`}>
+          {reviewState === "idle" ? "Review Pricing" : reviewState === "calculating" ? "AI Re-calculating..." : "Optimized ✓"}
         </button>
       </div>
 

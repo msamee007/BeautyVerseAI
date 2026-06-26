@@ -6,10 +6,14 @@ import { useState, useEffect } from "react";
 export default function ProviderOverviewPage() {
   const isVerified = true;
   const [category, setCategory] = useState("bridal_studio"); 
+  const [storeName, setStoreName] = useState("Premium Salon");
+  const [crowdStatus, setCrowdStatus] = useState("available");
 
   useEffect(() => {
     const cat = localStorage.getItem("provider_category");
     if (cat) setCategory(cat);
+    const store = localStorage.getItem("provider_store");
+    if (store) setStoreName(store);
   }, []);
 
   const getDisplayCategory = (cat: string) => {
@@ -32,7 +36,7 @@ export default function ProviderOverviewPage() {
           <span className="text-4xl">{isVerified ? "✅" : "⚠️"}</span>
           <div>
             <h3 className={`text-xl font-bold ${isVerified ? "text-green-800 dark:text-green-400" : "text-amber-800 dark:text-amber-400"}`}>
-              {isVerified ? `Verified ${getDisplayCategory(category)}` : "Verification Pending"}
+              {isVerified ? `Verified: ${storeName}` : "Verification Pending"}
             </h3>
             <p className={isVerified ? "text-green-700 dark:text-green-500" : "text-amber-700 dark:text-amber-500"}>
               {isVerified ? "Your business license has been approved. You are receiving maximum marketplace visibility." : "Please upload your business license to get the Verified Badge and boost your ranking."}
@@ -134,25 +138,33 @@ export default function ProviderOverviewPage() {
           <p className="text-muted-foreground mb-6">Update this so walk-in users know your current availability via the marketplace.</p>
           
           <div className="grid grid-cols-2 gap-4">
-            <button className="p-4 border-2 border-green-500 bg-green-50 dark:bg-green-900/20 rounded-xl text-left">
+            <button 
+              onClick={() => setCrowdStatus("available")}
+              className={`p-4 border-2 rounded-xl text-left transition-colors ${crowdStatus === 'available' ? 'border-green-500 bg-green-50 dark:bg-green-900/20' : 'border-border hover:border-green-400'}`}>
               <span className="text-2xl mb-2 block">🟢</span>
-              <h4 className="font-bold text-green-800 dark:text-green-400">Available</h4>
-              <p className="text-xs text-green-700/70">Accepting walk-ins</p>
+              <h4 className={`font-bold ${crowdStatus === 'available' ? 'text-green-800 dark:text-green-400' : ''}`}>Available</h4>
+              <p className={`text-xs ${crowdStatus === 'available' ? 'text-green-700/70' : 'text-muted-foreground'}`}>Accepting walk-ins</p>
             </button>
-            <button className="p-4 border border-border hover:border-amber-500 rounded-xl text-left transition-colors">
+            <button 
+              onClick={() => setCrowdStatus("busy")}
+              className={`p-4 border-2 rounded-xl text-left transition-colors ${crowdStatus === 'busy' ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/20' : 'border-border hover:border-amber-400'}`}>
               <span className="text-2xl mb-2 block">🔴</span>
-              <h4 className="font-bold">Busy</h4>
-              <p className="text-xs text-muted-foreground">30+ min wait</p>
+              <h4 className={`font-bold ${crowdStatus === 'busy' ? 'text-amber-800 dark:text-amber-400' : ''}`}>Busy</h4>
+              <p className={`text-xs ${crowdStatus === 'busy' ? 'text-amber-700/70' : 'text-muted-foreground'}`}>30+ min wait</p>
             </button>
-            <button className="p-4 border border-border hover:border-gray-500 rounded-xl text-left transition-colors">
+            <button 
+              onClick={() => setCrowdStatus("capacity")}
+              className={`p-4 border-2 rounded-xl text-left transition-colors ${crowdStatus === 'capacity' ? 'border-gray-500 bg-gray-100 dark:bg-gray-800' : 'border-border hover:border-gray-400'}`}>
               <span className="text-2xl mb-2 block">⚫</span>
-              <h4 className="font-bold">At Capacity</h4>
-              <p className="text-xs text-muted-foreground">No walk-ins</p>
+              <h4 className={`font-bold ${crowdStatus === 'capacity' ? 'text-gray-800 dark:text-gray-200' : ''}`}>At Capacity</h4>
+              <p className={`text-xs ${crowdStatus === 'capacity' ? 'text-gray-600' : 'text-muted-foreground'}`}>No walk-ins</p>
             </button>
-            <button className="p-4 border border-border hover:border-gray-400 rounded-xl text-left transition-colors">
+            <button 
+              onClick={() => setCrowdStatus("closed")}
+              className={`p-4 border-2 rounded-xl text-left transition-colors ${crowdStatus === 'closed' ? 'border-gray-300 bg-gray-50 dark:bg-gray-900/40' : 'border-border hover:border-gray-300'}`}>
               <span className="text-2xl mb-2 block">⚪</span>
-              <h4 className="font-bold">Closed</h4>
-              <p className="text-xs text-muted-foreground">Off duty</p>
+              <h4 className={`font-bold ${crowdStatus === 'closed' ? 'text-gray-500' : ''}`}>Closed</h4>
+              <p className={`text-xs ${crowdStatus === 'closed' ? 'text-gray-400' : 'text-muted-foreground'}`}>Off duty</p>
             </button>
           </div>
         </div>

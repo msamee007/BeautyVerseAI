@@ -1,4 +1,15 @@
+"use client";
+
+import { useState } from "react";
+
 export default function AppointmentsPage() {
+  const [syncState, setSyncState] = useState("idle");
+
+  const handleSync = () => {
+    setSyncState("syncing");
+    setTimeout(() => setSyncState("done"), 1200);
+  };
+
   return (
     <div className="space-y-8 max-w-5xl flex flex-col min-h-screen pb-12">
       <div className="flex-1">
@@ -29,10 +40,18 @@ export default function AppointmentsPage() {
           </div>
           
           <div className="md:col-span-2 bg-card border border-border p-6 rounded-3xl shadow-sm">
-            <h3 className="text-xl font-bold mb-4">Calendar View</h3>
-            <div className="w-full h-48 bg-muted rounded-xl border border-dashed border-border flex items-center justify-center">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">Calendar View</h3>
+              <button 
+                onClick={handleSync}
+                className="text-sm font-bold text-primary hover:underline"
+              >
+                {syncState === "idle" ? "Sync Google Calendar" : syncState === "syncing" ? "Syncing..." : "Synced ✓"}
+              </button>
+            </div>
+            <div className="w-full h-48 bg-muted rounded-xl border border-dashed border-border flex flex-col items-center justify-center">
               <p className="text-muted-foreground font-medium flex items-center gap-2">
-                <span>📅</span> Calendar sync module active. Full calendar loaded.
+                <span>📅</span> {syncState === "done" ? "All external appointments synced." : "Calendar sync module active. Full calendar loaded."}
               </p>
             </div>
           </div>
