@@ -5,10 +5,10 @@ import { ReactNode, useState } from "react";
 import { useTheme, ThemeMode, MOCK_PROFILES } from "@/components/ThemeProvider";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { LayoutDashboard, Calendar, Heart, Sparkles, Wallet, Settings, Trees, UserCircle, PawPrint, Building2, Landmark, Castle, Tent } from "lucide-react";
+import { LayoutDashboard, Calendar, Heart, Sparkles, Wallet, Settings, Trees, UserCircle, PawPrint, Building2, Landmark, Castle, Tent, Moon, Sun } from "lucide-react";
 
 export default function CustomerLayout({ children }: { children: ReactNode }) {
-  const { mode, setMode, activeCity, setActiveCity, currentUser, setCurrentUser, isDemo } = useTheme();
+  const { mode, setMode, activeCity, setActiveCity, currentUser, setCurrentUser, isDemo, isDark, toggleDark } = useTheme();
   const router = useRouter();
   const [isModeLoading, setIsModeLoading] = useState(false);
   const [isCityLoading, setIsCityLoading] = useState(false);
@@ -128,13 +128,13 @@ export default function CustomerLayout({ children }: { children: ReactNode }) {
       <main className="flex-1 overflow-y-auto">
         <header className="h-16 bg-card border-b border-border flex items-center justify-between px-8 sticky top-0 z-[60]">
           {/* Mode Selector for Customer Portal */}
-          <div className="flex bg-slate-100 p-1.5 rounded-xl border border-slate-200 shadow-inner">
+          <div className="flex bg-muted p-1.5 rounded-xl border border-border shadow-inner">
             {(["female", "male", "pet"] as ThemeMode[]).map((m) => (
               <button
                 key={m}
                 onClick={() => handleModeChange(m)}
                 className={`px-5 py-2 rounded-lg text-sm font-bold transition-all duration-300 capitalize flex items-center gap-2 ${
-                  mode === m ? "bg-white text-slate-900 shadow-md ring-1 ring-slate-200 scale-105 z-10" : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+                  mode === m ? "bg-background text-foreground shadow-md ring-1 ring-border scale-105 z-10" : "text-muted-foreground hover:text-foreground hover:bg-background/50"
                 }`}
               >
                 {m === 'female' ? <span className="flex items-center gap-1"><Trees className="w-4 h-4"/> Female</span> : m === 'male' ? <span className="flex items-center gap-1"><UserCircle className="w-4 h-4"/> Male</span> : <span className="flex items-center gap-1"><PawPrint className="w-4 h-4"/> Pet</span>}
@@ -143,16 +143,23 @@ export default function CustomerLayout({ children }: { children: ReactNode }) {
           </div>
 
           <div className="flex items-center gap-4">
+            <button 
+              onClick={toggleDark}
+              className="p-2 bg-muted text-muted-foreground hover:text-foreground rounded-full transition-colors"
+            >
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+
             {/* City Selector injected into Navbar */}
-            <div className="flex bg-slate-100 p-1.5 rounded-xl border border-slate-200 shadow-inner">
+            <div className="flex bg-muted p-1.5 rounded-xl border border-border shadow-inner hidden md:flex">
               {CITIES.map((city) => (
                 <button
                   key={city.id}
                   onClick={() => handleCityChange(city.id)}
                   className={`px-4 py-2 rounded-lg text-xs font-bold transition-all duration-300 ${
                     activeCity === city.id 
-                      ? "bg-slate-900 text-white shadow-md scale-105 z-10" 
-                      : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+                      ? "bg-foreground text-background shadow-md scale-105 z-10" 
+                      : "text-muted-foreground hover:bg-background/50 hover:text-foreground"
                   }`}
                 >
                   {city.name}
@@ -181,7 +188,7 @@ export default function CustomerLayout({ children }: { children: ReactNode }) {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-3 w-64 bg-white border border-slate-100 rounded-2xl shadow-2xl overflow-hidden py-2 z-[100]"
+                    className="absolute right-0 mt-3 w-64 bg-popover border border-border rounded-2xl shadow-2xl overflow-hidden py-2 z-[100]"
                   >
                     <div className="px-4 py-2 border-b border-border mb-2">
                       <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Switch Profile</p>
@@ -193,7 +200,7 @@ export default function CustomerLayout({ children }: { children: ReactNode }) {
                           setCurrentUser(profile);
                           setIsProfileDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors hover:bg-slate-50 ${
+                        className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors hover:bg-muted/50 ${
                           currentUser.id === profile.id ? 'bg-primary/5' : ''
                         }`}
                       >

@@ -41,29 +41,29 @@ export default function CustomerLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden transition-colors duration-500">
       {/* Background Decor */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-rose-200/30 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-teal-200/30 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center mb-8">
-        <Link href="/" className="inline-flex items-center justify-center gap-2 text-3xl font-bold text-slate-900 mb-2">
-          <Trees className="w-8 h-8 text-rose-400" /> BeautyVerse<span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-teal-400">AI</span>
+        <Link href="/" className="inline-flex items-center justify-center gap-2 text-3xl font-bold text-foreground mb-2">
+          <Trees className="w-8 h-8 text-primary" /> BeautyVerse<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-400">AI</span>
         </Link>
-        <h2 className="text-3xl font-serif font-bold text-slate-900">Welcome Back</h2>
-        <p className="text-slate-600 mt-2">Sign in to your customer portal</p>
+        <h2 className="text-3xl font-serif font-bold text-foreground">Welcome Back</h2>
+        <p className="text-muted-foreground mt-2">Sign in to your customer portal</p>
       </div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-        <div className="bg-white py-10 px-6 sm:px-10 shadow-2xl rounded-3xl border border-slate-100">
+        <div className="bg-card py-10 px-6 sm:px-10 shadow-2xl rounded-3xl border border-border">
           <form className="space-y-6" onSubmit={handleLogin}>
             <div>
-              <label htmlFor="name" className="block text-sm font-semibold text-slate-700">
+              <label htmlFor="name" className="block text-sm font-semibold text-foreground">
                 Full Name
               </label>
               <div className="mt-2 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <UserCircle className="h-5 w-5 text-slate-400" />
+                  <UserCircle className="h-5 w-5 text-muted-foreground" />
                 </div>
                 <input
                   id="name"
@@ -72,7 +72,7 @@ export default function CustomerLogin() {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="appearance-none block w-full pl-10 pr-3 py-3 border border-slate-300 rounded-xl shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-rose-500 sm:text-sm transition-all"
+                  className="appearance-none block w-full pl-10 pr-3 py-3 bg-background border border-border rounded-xl shadow-sm placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-all text-foreground"
                   placeholder="Enter your name"
                 />
               </div>
@@ -81,7 +81,7 @@ export default function CustomerLogin() {
             <button
               type="submit"
               disabled={loading || !name.trim()}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:-translate-y-0.5"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-background bg-foreground hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:-translate-y-0.5"
             >
               {loading ? "Authenticating..." : "Log in to Portal"}
             </button>
@@ -90,10 +90,10 @@ export default function CustomerLogin() {
           <div className="mt-8">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-200" />
+                <div className="w-full border-t border-border" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-slate-500">Or continue without account</span>
+                <span className="px-2 bg-card text-muted-foreground">Or continue without account</span>
               </div>
             </div>
 
@@ -101,9 +101,9 @@ export default function CustomerLogin() {
               <button
                 onClick={handleDemoLogin}
                 disabled={loading}
-                className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-slate-300 rounded-xl shadow-sm text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 disabled:opacity-50 transition-all"
+                className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-border rounded-xl shadow-sm text-sm font-bold text-foreground bg-card hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-foreground disabled:opacity-50 transition-all"
               >
-                <Sparkles className="w-4 h-4 text-rose-500" />
+                <Sparkles className="w-4 h-4 text-primary" />
                 Open using demo account
               </button>
             </div>

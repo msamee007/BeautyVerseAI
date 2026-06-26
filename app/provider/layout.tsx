@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { ReactNode, useEffect, useState } from "react";
+import { useTheme } from "@/components/ThemeProvider";
+import { Moon, Sun } from "lucide-react";
 
 export default function ProviderLayout({ children }: { children: ReactNode }) {
+  const { isDark, toggleDark } = useTheme();
   const [providerDetails, setProviderDetails] = useState({ username: "Owner", store: "Premium Salon", city: "Mumbai" });
 
   useEffect(() => {
@@ -59,6 +62,12 @@ export default function ProviderLayout({ children }: { children: ReactNode }) {
         <header className="h-16 bg-card border-b border-border flex items-center justify-between px-8 sticky top-0 z-10">
           <h1 className="font-bold text-xl">Dashboard</h1>
           <div className="flex items-center gap-6">
+            <button 
+              onClick={toggleDark}
+              className="p-2 bg-muted text-muted-foreground hover:text-foreground rounded-full transition-colors"
+            >
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
             <Link 
               href="/"
               className="hidden md:flex text-sm font-bold text-primary bg-primary/10 px-4 py-2 rounded-lg hover:bg-primary/20 transition-colors"
