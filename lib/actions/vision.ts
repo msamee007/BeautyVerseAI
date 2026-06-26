@@ -33,7 +33,7 @@ ${cityContext}
 Analyze their face shape, skin tone, hair texture, or pet breed meticulously.
 Do not hallucinate.
 
-Return ONLY valid JSON matching this schema:
+Return ONLY valid JSON matching this schema. CRITICAL: Do NOT use raw newlines inside string values. Keep all text on a single line per field, or escape newlines properly as \\n.
 {
   "analysis": "Detailed breakdown of their current features",
   "recommendation": "Expert advice on what style/treatment would suit them best",
@@ -43,32 +43,38 @@ Return ONLY valid JSON matching this schema:
 }`;
 
   try {
-    // Simulate network delay for MVP feel
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: [
+        systemPrompt,
+        {
+          inlineData: {
+            data: base64Data,
+            mimeType: "image/jpeg"
+          }
+        }
+      ],
+      config: {
+        responseMimeType: "application/json",
+        maxOutputTokens: 1000,
+        temperature: 0.3,
+      }
+    });
 
-    // Simulated "Wrong Photo" Detection Logic
-    // If the image is the Unsplash demo photo, we can simulate an error if they are in 'pet' mode
-    if (mode === "pet" && base64Image.includes("1544005313-94ddf0286df2")) {
-      return {
-        error: "Face detected instead of a pet! Please switch to Male or Female mode to process this image."
-      };
-    } else if ((mode === "male" || mode === "female") && base64Image.includes("pet-demo-image-string-here")) {
-      return {
-         error: "Pet detected! Please switch to Pet Mode for this image."
-      };
-    }
+    if (!response.text) throw new Error("Empty vision response");
+    
+    // Strip potential markdown formatting
+    const rawText = response.text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    const jsonResult = JSON.parse(rawText);
 
-    // Return instant simulated response to avoid hanging
-    return {
-      analysis: `Based on your photo, you have a distinct structured jawline with a balanced ${mode === 'male' ? 'masculine' : 'elegant'} facial profile. Your hair texture appears to have natural volume.`,
-      recommendation: mode === 'male' ? "A mid-level fade with a textured crop on top." : mode === 'pet' ? "A full summer cut to keep them cool while maintaining the breed's signature look." : "A layered balayage to enhance natural depth and frame your face beautifully.",
-      search_tags: mode === 'male' ? ["Fade", "Beard Trim", "Styling"] : mode === 'pet' ? ["Full Grooming", "De-shedding"] : ["Balayage", "Layered Cut", "Coloring"],
-      estimated_maintenance: "Every 3 to 4 weeks",
-      estimated_price: city.toLowerCase() === 'bangalore' ? "₹4,500 - ₹6,000" : city.toLowerCase() === 'mumbai' ? "₹2,500 - ₹4,000" : "₹1,800 - ₹3,000"
-    };
+    try {
+      await redis.set(cacheKey, JSON.stringify(jsonResult), { ex: 86400 });
+    } catch(e) {}
+    
+    return jsonResult;
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("[VISION AI] Error analyzing photo:", error);
-    return { error: "Failed to process image. Please try again." };
+    return { error: error.message || "Failed to process image. Please try again." };
   }
 }

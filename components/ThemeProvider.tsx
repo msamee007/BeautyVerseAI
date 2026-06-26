@@ -26,6 +26,8 @@ interface ThemeContextProps {
   setActiveCity: (city: string) => void;
   currentUser: UserProfile;
   setCurrentUser: (profile: UserProfile) => void;
+  isDemo: boolean;
+  setIsDemo: (val: boolean) => void;
 }
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
@@ -41,6 +43,7 @@ export function ThemeProvider({
   const [isDark, setIsDark] = useState(false);
   const [activeCity, setActiveCity] = useState("mumbai");
   const [currentUser, setCurrentUserState] = useState<UserProfile>(MOCK_PROFILES[0]);
+  const [isDemo, setIsDemoState] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -52,8 +55,18 @@ export function ThemeProvider({
     
     const savedUserId = localStorage.getItem("beautyverse-user");
     if (savedUserId) {
-      const foundUser = MOCK_PROFILES.find(p => p.id === savedUserId);
-      if (foundUser) setCurrentUserState(foundUser);
+      if (savedUserId === 'real') {
+        const customName = localStorage.getItem("beautyverse-custom-name") || "User";
+        setCurrentUserState({ id: 'real', name: customName, subtitle: 'Premium Member', initials: customName.charAt(0) });
+      } else {
+        const foundUser = MOCK_PROFILES.find(p => p.id === savedUserId);
+        if (foundUser) setCurrentUserState(foundUser);
+      }
+    }
+    
+    const savedIsDemo = localStorage.getItem("beautyverse-isdemo");
+    if (savedIsDemo === "false") {
+      setIsDemoState(false);
     }
   }, []);
 
@@ -89,10 +102,18 @@ export function ThemeProvider({
   const setCurrentUser = (profile: UserProfile) => {
     setCurrentUserState(profile);
     localStorage.setItem("beautyverse-user", profile.id);
+    if (profile.id === 'real') {
+      localStorage.setItem("beautyverse-custom-name", profile.name);
+    }
+  };
+
+  const setIsDemo = (val: boolean) => {
+    setIsDemoState(val);
+    localStorage.setItem("beautyverse-isdemo", val ? "true" : "false");
   };
 
   return (
-    <ThemeContext.Provider value={{ mode, setMode, isDark, toggleDark, activeCity, setActiveCity, currentUser, setCurrentUser }}>
+    <ThemeContext.Provider value={{ mode, setMode, isDark, toggleDark, activeCity, setActiveCity, currentUser, setCurrentUser, isDemo, setIsDemo }}>
       {isMounted ? children : <div className="min-h-screen bg-background opacity-0"></div>}
     </ThemeContext.Provider>
   );

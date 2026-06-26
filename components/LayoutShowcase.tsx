@@ -67,7 +67,7 @@ export function LayoutShowcase() {
             {/* Auth Buttons */}
             <div className="flex items-center gap-3 pl-4 border-l border-slate-200">
               <Link 
-                href="/customer"
+                href="/customer-login"
                 className="px-6 py-2 bg-slate-900 text-white rounded-full text-sm font-bold hover:bg-slate-800 hover:shadow-xl hover:-translate-y-0.5 transition-all text-center"
               >
                 User
@@ -104,7 +104,7 @@ export function LayoutShowcase() {
              </p>
              
              <div className="flex flex-col sm:flex-row justify-center gap-6 pt-8">
-               <Link href="/customer">
+               <Link href="/customer-login">
                  <button className="px-8 py-4 bg-slate-900 text-white font-bold uppercase tracking-widest rounded-2xl hover:scale-105 transition-transform shadow-2xl flex items-center gap-2 mx-auto sm:mx-0">
                    Enter Portal <Sparkles className="w-5 h-5" />
                  </button>

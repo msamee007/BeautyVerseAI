@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { LayoutDashboard, Calendar, Heart, Sparkles, Wallet, Settings, Trees, UserCircle, PawPrint, Building2, Landmark, Castle, Tent } from "lucide-react";
 
 export default function CustomerLayout({ children }: { children: ReactNode }) {
-  const { mode, setMode, activeCity, setActiveCity, currentUser, setCurrentUser } = useTheme();
+  const { mode, setMode, activeCity, setActiveCity, currentUser, setCurrentUser, isDemo } = useTheme();
   const router = useRouter();
   const [isModeLoading, setIsModeLoading] = useState(false);
   const [isCityLoading, setIsCityLoading] = useState(false);
@@ -162,8 +162,8 @@ export default function CustomerLayout({ children }: { children: ReactNode }) {
 
             <div className="relative border-l border-border pl-4">
               <button 
-                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                className="flex items-center gap-3 text-left focus:outline-none group"
+                onClick={() => isDemo && setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                className={`flex items-center gap-3 text-left focus:outline-none group ${isDemo ? 'cursor-pointer' : 'cursor-default'}`}
               >
                 <div>
                   <p className="text-sm font-bold group-hover:text-primary transition-colors">{currentUser.name}</p>
@@ -175,7 +175,7 @@ export default function CustomerLayout({ children }: { children: ReactNode }) {
               </button>
               
               <AnimatePresence>
-                {isProfileDropdownOpen && (
+                {isProfileDropdownOpen && isDemo && (
                   <motion.div
                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}

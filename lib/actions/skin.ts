@@ -22,19 +22,19 @@ export async function analyzeSkin(base64Image: string, mode: string) {
 
   const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, '');
 
-  let modeContext = "The user is a female. Focus on female skincare, makeup readiness, and standard dermatology.";
-  if (mode === "male") modeContext = "The user is male. Focus on male grooming, beard skin health, and male dermatology.";
+  let modeContext = "The user is a female. Focus on cosmetic female skincare, makeup readiness, and general skin texture.";
+  if (mode === "male") modeContext = "The user is male. Focus on cosmetic male grooming, beard skin health, and texture.";
   if (mode === "pet") modeContext = "The user is analyzing a pet (dog/cat). Focus on coat health, skin flakiness, and pet grooming needs.";
 
-  const systemPrompt = `You are an expert Dermatologist and Grooming AI.
-Analyze the provided image for skin or coat health.
+  const systemPrompt = `You are an expert Cosmetic Beauty Advisor and Grooming AI. (You are NOT a medical professional, do not provide medical diagnoses).
+Analyze the cosmetic appearance of the provided image for skin or coat health.
 ${modeContext}
 
-Return ONLY valid JSON matching this schema:
+Return ONLY valid JSON matching this schema. CRITICAL: Do NOT use raw newlines inside string values. Keep all text on a single line per field, or escape newlines properly as \\n.
 {
   "skinType": "A short 2-4 word description (e.g., 'Oily / Acne-Prone', 'Dry Coat / Flaky')",
   "hydration": "A percentage string (e.g., '42%')",
-  "recommendation": "A specific treatment or product recommendation",
+  "recommendation": "A specific cosmetic treatment or product recommendation",
   "confidence": "A percentage string (e.g., '94%')"
 }`;
 
@@ -58,15 +58,18 @@ Return ONLY valid JSON matching this schema:
     });
 
     if (!response.text) throw new Error("Empty vision response");
-    const jsonResult = JSON.parse(response.text);
+    
+    // Strip potential markdown formatting
+    const rawText = response.text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    const jsonResult = JSON.parse(rawText);
 
     try {
       await redis.set(cacheKey, JSON.stringify(jsonResult), { ex: 86400 });
     } catch(e) {}
     
     return jsonResult;
-  } catch (error) {
+  } catch (error: any) {
     console.error("[SKIN AI] Error analyzing photo:", error);
-    return { error: "Failed to process skin analysis. Please make sure the image is clear and try again." };
+    return { error: error.message || "Failed to process skin analysis. Gemini might have blocked this due to safety filters." };
   }
 }
