@@ -29,7 +29,7 @@ export default function ChatConciergePage() {
       } else if (lowerInput.includes("no") || lowerInput.includes("nah")) {
         aiReply = "No problem at all! We can adjust the plan. What specific concerns or preferences do you have instead?";
       } else if (lowerInput.includes("hair") || lowerInput.includes("haircut") || lowerInput.includes("balding") || lowerInput.includes("loosing")) {
-        aiReply = mode === "male" 
+        aiReply = mode === "male"
           ? "For hair thinning or loss concerns, I highly recommend a texturizing cut that adds volume, paired with a stimulating scalp treatment to promote health."
           : "For hair concerns, a volumizing layered cut combined with a keratin or deep conditioning spa treatment works wonders. Would you like me to find specialists for this?";
       } else if (lowerInput.includes("price") || lowerInput.includes("cost") || lowerInput.includes("budget") || lowerInput.includes("cheap")) {
@@ -89,18 +89,18 @@ export default function ChatConciergePage() {
             </div>
           )}
         </div>
-        
+
         <div className="p-4 bg-background border-t border-border">
           <div className="flex gap-2">
-            <input 
-              type="text" 
+            <input
+              type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Ask about styles, treatments, or event prep..."
               className="flex-1 bg-muted border-none rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/50"
             />
-            <button 
+            <button
               onClick={handleSend}
               disabled={!input.trim() || isTyping}
               className="bg-primary text-primary-foreground p-3 rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
